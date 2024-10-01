@@ -135,3 +135,4 @@ for prokka_output in *_prokka_results; do
   fi
 done
 ```
+There is a slight difference in gene counts between Prokka and Prodigal can occur due to various factors. Prodigal (3594) might identify slightly more coding sequences than Prokka (3589) because they use different algorithms for gene prediction. Prokka is designed for annotating genes using various biological data sources, rather than solely making predictions based on sequence features like Prodigal. This comprehensive approach can lead to the elimination of some predicted genes during the annotation process. Prokka also includes annotations for non-coding genes, while Prodigal focuses strictly on protein-coding sequences.
