@@ -79,3 +79,59 @@ done
 
 
 ```
+
+## Problem 4
+Genome with the highest count using Prokka: GCA_000006745.1_ASM674v1_genomic.fna Total CDS count: 3589
+```bash
+Directory: GCA_000006745.1_ASM674v1_genomic.fna_prokka_results - Total CDS count: 3589
+Directory: GCA_000006825.1_ASM682v1_genomic.fna_prokka_results - Total CDS count: 2028
+Directory: GCA_000006865.1_ASM686v1_genomic.fna_prokka_results - Total CDS count: 2383
+Directory: GCA_000007125.1_ASM712v1_genomic.fna_prokka_results - Total CDS count: 3150
+Directory: GCA_000008525.1_ASM852v1_genomic.fna_prokka_results - Total CDS count: 1577
+Directory: GCA_000008545.1_ASM854v1_genomic.fna_prokka_results - Total CDS count: 1861
+Directory: GCA_000008565.1_ASM856v1_genomic.fna_prokka_results - Total CDS count: 3245
+Directory: GCA_000008605.1_ASM860v1_genomic.fna_prokka_results - Total CDS count: 1001
+Directory: GCA_000008625.1_ASM862v1_genomic.fna_prokka_results - Total CDS count: 1771
+Directory: GCA_000008725.1_ASM872v1_genomic.fna_prokka_results - Total CDS count: 892
+Directory: GCA_000008745.1_ASM874v1_genomic.fna_prokka_results - Total CDS count: 1058
+Directory: GCA_000008785.1_ASM878v1_genomic.fna_prokka_results - Total CDS count: 1504
+Directory: GCA_000027305.1_ASM2730v1_genomic.fna_prokka_results - Total CDS count: 1748
+Directory: GCA_000091085.2_ASM9108v2_genomic.fna_prokka_results - Total CDS count: 1056
+```
+
+```bash
+#!/bin/bash
+
+# Annotate genomes with Prokka
+for genome_directory in GCA_*; do
+  genomic_file=$(find "$genome_directory" -name "*_genomic.fna")
+
+  if [[ -f "$genomic_file" ]]; then
+    output_directory="${genome_directory}_prokka_results"
+    prokka --outdir "$output_directory" --prefix "${genome_directory}" "$genomic_file"
+
+    result_file="$output_directory/${genome_directory}.txt"
+
+    if [[ -f "$result_file" ]]; then
+      cds_annotation_count=$(grep -w "CDS" "$result_file" | awk '{print $2}')
+      echo "Genome: $genomic_file - Annotated CDS count: $cds_annotation_count"
+    else
+      echo "Could not find Prokka output file for $genomic_file"
+    fi
+  else
+    echo "Genomic file not found in $genome_directory"
+  fi
+done
+
+# Collect CDS counts from Prokka output
+for prokka_output in *_prokka_results; do
+  text_file=$(find "$prokka_output" -name "*.txt")
+
+  if [[ -f "$text_file" ]]; then
+    cds_count_total=$(grep "CDS:" "$text_file" | awk '{print $2}')
+    echo "Directory: $prokka_output - Total CDS count: $cds_count_total"
+  else
+    echo "No text file found in $prokka_output"
+  fi
+done
+```
