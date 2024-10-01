@@ -136,3 +136,33 @@ for prokka_output in *_prokka_results; do
 done
 ```
 There is a slight difference in gene counts between Prokka and Prodigal can occur due to various factors. Prodigal (3594) might identify slightly more coding sequences than Prokka (3589) because they use different algorithms for gene prediction. Prokka is designed for annotating genes using various biological data sources, rather than solely making predictions based on sequence features like Prodigal. This comprehensive approach can lead to the elimination of some predicted genes during the annotation process. Prokka also includes annotations for non-coding genes, while Prodigal focuses strictly on protein-coding sequences.
+
+
+## Problem 5
+Combine all .gbk prokka files in one directory:
+```bash
+#!/bin/bash
+
+mkdir -p combined_output
+
+# Loop through each directory and copy .gbk files
+for dir in */; do
+  if [[ -d "$dir" ]]; then
+    cp "${dir}"*.gbk combined_output/ 2>/dev/null
+  fi
+done
+
+echo "All .gbk files have been copied to combined_output."
+```
+Extract all unique genes
+```bash
+grep -h 'gene=' *.gbk | cut -d'=' -f2 | tr -d '"' | sort -u > unique_genes.txt
+```
+First five genes
+```bash
+aaaT
+aaeA
+aaeA_1
+aaeA_2
+aaeB
+```
