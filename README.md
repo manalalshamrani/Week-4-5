@@ -17,6 +17,7 @@ grep -c "CDS" prodigal_output.gbk
 ```
 
 ## Problem 3
+Genome with the highest number of genes: ./GCA_000005845.2_ASM584v2_genomic.fna, 4319
 ```bash
 #!/bin/bash                                                                                                                                                                       
 
